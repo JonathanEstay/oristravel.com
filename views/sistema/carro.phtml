@@ -28,7 +28,7 @@
 		  	
                             <div class="tab-content">
                                 <div class="tab-pane active" id="domwizard">
-                                    <form action="#" id="basicwizard" class="form-horizontal">
+                                    <div id="basicwizard" class="form-horizontal">
                                         
                                         
                                         <fieldset title="Paso 1">
@@ -37,10 +37,15 @@
                                                         <div class="table-responsive">
 
 
-                                                            <table class="table table-bordered table-striped" style="font-size: 11px;">
-                                                                <thead>
+                                                            <table class="table table-bordered table-striped"  style="font-size: 11px;" id="carroTable">
+                                                                
+                                                               <?php 
+                                                               if($this->objCarro)
+                                                               {
+                                                                   ?>
+                                                                   <thead>
                                                                     <tr>
-                                                                        <th width="70"></th>
+                                                                        <th width="70">Status</th>
                                                                         <th>Servicio</th>
                                                                         <th>Habitaci&oacute;n</th>
                                                                         <th>P.A.</th>
@@ -56,153 +61,140 @@
                                                                         <th></th>
                                                                     </tr>
                                                                 </thead>
-
-                                                                <tbody>
-                                                                    <tr>
-                                                                        <th><span class="label label-success">AVAILABLE</span></th>
-                                                                        <td class="text-muted">None (auto)</td>
-                                                                        <td>100%</td>
-                                                                        <td>100%</td>
-                                                                        <td>100%</td>
-                                                                        <td class="text-muted">None (auto)</td>
-                                                                        <td>100%</td>
-                                                                        <td>100%</td>
-                                                                        <td>100%</td>
-                                                                        <td class="text-muted">None (auto)</td>
-                                                                        <td>100%</td>
-                                                                        <td>100%</td>
-                                                                        <td style="color: #DF5F00; font-weight: bold;">USD 228,70</td>
-                                                                        <td></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <th><span class="label label-success">AVAILABLE</span></th>
-                                                                        <td class="text-muted">None (auto)</td>
-                                                                        <td>100%</td>
-                                                                        <td>100%</td>
-                                                                        <td>100%</td>
-                                                                        <td class="text-muted">None (auto)</td>
-                                                                        <td>100%</td>
-                                                                        <td>100%</td>
-                                                                        <td>100%</td>
-                                                                        <td class="text-muted">None (auto)</td>
-                                                                        <td>100%</td>
-                                                                        <td>100%</td>
-                                                                        <td style="color: #DF5F00; font-weight: bold;">USD 228,70</td>
-                                                                        <td></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <th><span class="label label-primary">ON REQUEST</span></th>
-                                                                        <td class="text-muted">None (auto)</td>
-                                                                        <td>100%</td>
-                                                                        <td>100%</td>
-                                                                        <td>100%</td>
-                                                                        <td class="text-muted">None (auto)</td>
-                                                                        <td>100%</td>
-                                                                        <td>100%</td>
-                                                                        <td>100%</td>
-                                                                        <td class="text-muted">None (auto)</td>
-                                                                        <td>100%</td>
-                                                                        <td>100%</td>
-                                                                        <td style="color: #DF5F00; font-weight: bold;">USD 228,70</td>
-                                                                        <td></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td colspan="12" align="right">Total</td>
-                                                                        <td style="color: #DF5F00; font-weight: bold;">USD 228,70</td>
-                                                                        <td></td>
-                                                                    </tr>
-                                                                </tbody>
+                                                                  <?php
+                                                                   $totalCompras=0;
+                                                                   foreach($this->objCarro as $objCar )
+                                                                   {
+                                                               ?>   
+                                                                
+                                                                        <tbody>
+                                                                            <tr>
+                                                                                <th><span class="label label-success"><?php echo $objCar->getStatus(); ?></span></th>
+                                                                                <td><?php echo $objCar->getServicio(); ?></td>
+                                                                                <td class="text-muted"><?php echo $objCar->getHabitacion() ?></td>
+                                                                                <td><?php echo $objCar->getPa() ?></td>
+                                                                                <td><?php echo $objCar->getNhab() ?></td>
+                                                                                <td><?php echo $objCar->getA() ?></td>
+                                                                                <td class="text-muted"><?php echo $objCar->getC() ?></td>
+                                                                                <td><?php  echo $objCar->getPais() ?></td>
+                                                                                <td><?php echo $objCar->getCiudad() ?></td>
+                                                                                <td><?php echo Funciones::invertirFecha($objCar->getFecha_in(), '-', '/') ?></td>
+                                                                                <td class="text-muted"><?php if($objCar->getFecha_out()=='0000-00-00'){echo "";} else {echo Funciones::invertirFecha($objCar->getFecha_out(),'-','/');} ?></td>
+                                                                                <td><?php echo $objCar->getVuelo() ?></td>
+                                                                                <td style="color: #DF5F00; font-weight: bold;"><?php echo $objCar->getTotal() ?></td>                                                                               
+                                                                                <td></td>
+                                                                            </tr>
+                                                                            
+                                                                
+                                                                <?php
+                                                                   }
+                                                                   ?>
+                                                                            <tr>
+                                                                                <td colspan="12" align="right">Total</td>
+                                                                                <td style="color: #DF5F00; font-weight: bold;"><?php echo $totalCompras+=$objCar->getTotal()?></td>
+                                                                                <td></td>
+                                                                            </tr>
+                                                                        </tbody>
+                                                                        </table>
+                                                                 <?php
+                                                                 ?>
+                                                            
+                                                                             
+                                                                 <?php
+                                                               }
+                                                               else{
+                                                                ?>  
+                                                                        <tr>
+                                                                            <td>
+                                                                        <center><strong>No se encontraron reservas.</strong></center>
+                                                                            </td>
+                                                                        </tr>
+                                                                                                                                    </table>
                                                             </table>
+                                                        
 
-
-
+                                                                <?php   
+                                                               }
+                           
+                                                                ?>
+                                                           <span class="pull-right">
+                                                                                <input type="button" class="finish btn-primary btn" id="btnSig_P1" value="Siguiente" />
+                                                                            </span>
+                                                                            <br>      
                                                         </div>
-                                            <span class="pull-right">
-                                                <input type="button" class="finish btn-primary btn" id="btnSig_P1" value="Siguiente" />
-                                            </span>
-                                            <br>
-                                        </fieldset>
-                                        
-                                        
-                                        
-                                        
-                                        
-                                        
-                                        
-                                        
-                                        
-                                        
-                                        <fieldset title="Paso 2">
-                                            <legend>Detalle de pasajeros</legend>
                                             
+                                        </fieldset>
+   
+                                        <fieldset title="Paso 2">
+                                            
+                                            <legend>Detalle de pasajeros</legend>
+                                            <form class="frm_paso2">
                                             <div class="table-responsive">
-
-
+                                      
+                                               
                                                 <table class="table table-bordered table-striped" style="font-size: 11px; width: 600px;" align="center">
-                                                    <thead>
+                                                    <tbody> 
+                                                    <?php
+                                                    if(Session::get('sess_pBP_cntHab')){
+                                                    for($i = 1; $i<=Session::get('sess_pBP_cntHab'); $i++){  
+                                                    ?>
+                                                        <thead>
                                                         <tr>
-                                                            <th width="100">Habitacion 1</th>
+                                                            <th width="100">Habitaci&oacute;n <?php echo $i ?></th>
                                                             <th>Nombres</th>
                                                             <th>Apellidos</th>
                                                         </tr>
-                                                    </thead>
-
-                                                    <tbody>
+                                                       </thead>
+                                                       <?php
+                                                       if(Session::get('sess_BP_Adl_'.$i)){
+                                                       for($j = 1; $j <=Session::get('sess_BP_Adl_'.$i) ; $j++){                                          
+                                                       ?>
                                                         <tr>
-                                                            <th>Adulto 1</th>
-                                                            <td><input type="text" class="form-control" id="Carr_txtNombrePas_1" name="Carr_txtNombrePas_1" value="<?php if(isset($mL_ini)){ echo $mL_ini; } ?>"></td>
-                                                            <td><input type="text" class="form-control" id="Carr_txtApellidoPas_1" name="Carr_txtApellidoPas_1" value="<?php if(isset($mL_ini)){ echo $mL_ini; } ?>"></td>
+                                                            <th>Adulto <?php echo $j;?></th>
+                                                            <td><input type="text" class="form-control" id="Carr_txtNombrePas_<?php echo $i.'_'.$j?>" name="Carr_txtNombrePas_<?php echo $i.'_'.$j?>" value=""></td> <?php //if(isset($mL_ini)){ echo $mL_ini; } ?>
+                                                            <td><input type="text" class="form-control" id="Carr_txtApellidoPas_<?php echo $i.'_'.$j?>" name="Carr_txtApellidoPas_<?php echo $i.'_'.$j?>" value=""></td><?php //if(isset($mL_ini)){ echo $mL_ini; } ?>
                                                         </tr>
-                                                        <tr>
-                                                            <th>Adulto 1</th>
-                                                            <td><input type="text" class="form-control" id="Carr_txtNombrePas_1" name="Carr_txtNombrePas_1" value="<?php if(isset($mL_ini)){ echo $mL_ini; } ?>"></td>
-                                                            <td><input type="text" class="form-control" id="Carr_txtApellidoPas_1" name="Carr_txtApellidoPas_1" value="<?php if(isset($mL_ini)){ echo $mL_ini; } ?>"></td>
-                                                        </tr>
-                                                        <tr>
-                                                            <th>Adulto 1</th>
-                                                            <td><input type="text" class="form-control" id="Carr_txtNombrePas_1" name="Carr_txtNombrePas_1" value="<?php if(isset($mL_ini)){ echo $mL_ini; } ?>"></td>
-                                                            <td><input type="text" class="form-control" id="Carr_txtApellidoPas_1" name="Carr_txtApellidoPas_1" value="<?php if(isset($mL_ini)){ echo $mL_ini; } ?>"></td>
-                                                        </tr>
+                                                       <?php
+                                                           }
+                                                       }
+                                                    }
+                                                    ?>
+                          
                                                     </tbody>
+                                                
+
                                                 </table>
-
-
+                                                
+                                                <table class="table table-bordered table-striped" style="font-size: 11px; width: 600px;" align="center">
+                                                    <tr>
+                                                        <td>Escriba una nota</td>
+                                                        <td><textarea style='height: 150px;' id="Carr_textAreaNota" name="Carr_textAreaNota" class="form-control" value="Escriba una nota..."></textarea></td>
+                                                        
+                                                    </tr>
+                                                </table>
+                                           <?php
+                                                    }
+                                                    //Session::destroy('sess_pBP_cntHab');
+                                                   
+                                           ?>
 
                                             </div>
                                             
                                             <span class="pull-right">
                                                 <input type="button" class="finish btn-default btn" id="btnAtr_P2" value="Atras" />
-                                                <input type="button" class="finish btn-primary btn" id="btnSig_P2" value="Siguiente" />
+                                                <input type="button" class="finish btn-primary btn" id="btnSig_P2" value="Siguiente" onclick="carroAdl('<?php echo BASE_URL?>sistema/paso3');" />
                                             </span>
                                             <br>
+                                            </form>
                                         </fieldset>
-                                        
-                                        
-                                        
-                                        
-                                        
-                                        
-                                        
-                                        
-                                        
-                                        
+    
                                         <fieldset title="Paso 3">
                                             <legend>SOLICITUD DE RESERVA</legend>
-                                            <div class="row">
-                                                    <label class="col-md-3 control-label">Comenzando</label>
-                                                    <div class="col-md-9">
-                                                            <p>Comenzando a finalizar la solicitud de reserva</p>
-                                                            <p>Comenzando a finalizar la solicitud de reserva</p>
-                                                    </div>
+                                             <div class="panel panel-info" id="div_paso3">
+                                                 
                                             </div>
-                                            
-                                            <span class="pull-right">
-                                                <input type="button" class="finish btn-default btn" id="btnAtr_P3" value="Atras" />
-                                                <input type="submit" class="finish btn-success btn" value="Reservar" />
-                                            </span>
-                                            <br>
                                         </fieldset>
-                                    </form>
+                                    </div>
                                 </div>
 
 
@@ -235,24 +227,52 @@ $('#btnSig_P1').on('click',function(){
 
 
 $('#btnAtr_P2').on('click',function(){
+        
         $('#basicwizard-head-1').removeClass('stepy-active');
         $('#basicwizard-step-1').css('display', 'none');
         
+        
         $('#basicwizard-head-0').addClass('stepy-active');
         $('#basicwizard-step-0').css('display', 'block');
+        
 });
 $('#btnSig_P2').on('click',function(){
         $('#basicwizard-head-1').removeClass('stepy-active');
         $('#basicwizard-step-1').css('display', 'none');
         
+        //var a = $('#carroTable').html();
+        //$('#carroTableDet').html(a);
         $('#basicwizard-head-2').addClass('stepy-active');
         $('#basicwizard-step-2').css('display', 'block');
 });
+
+function carroAdl(url){
+ var formData = new FormData($(".frm_paso2")[0]);
+        $.ajax({
+             type:"POST", 
+             url:url,
+             data:formData,
+             cache: false,
+             contentType: false,
+             processData: false,
+             beforeSend: function () {
+             },
+             success:function(data)
+             {
+                 alert("ok");
+                 $("#div_paso3").html(data);
+             }
+         });   
+ 
+}
+
 
 
 $('#btnAtr_P3').on('click',function(){
         $('#basicwizard-head-2').removeClass('stepy-active');
         $('#basicwizard-step-2').css('display', 'none');
+        
+       
         
         $('#basicwizard-head-1').addClass('stepy-active');
         $('#basicwizard-step-1').css('display', 'block');

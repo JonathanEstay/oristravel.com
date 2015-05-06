@@ -33,6 +33,18 @@ class processController extends Controller
         //Session::set('sess_pCR_fechaDesde', $this->getTexto('txtFechaDesde-ConsRes'));
         //Session::set('sess_pCR_fechaHasta', $this->getTexto('txtFechaHasta-ConsRes'));
         //Session::set('sess_pCR_tipoFecha', $this->getTexto('rdbFecha'));
+        
+        for($i=1; $i<=3; $i++){ 
+            Session::set('sess_BP_Adl_'.$i,$this->getTexto('mL_cmbAdultos_'.$i));          
+        }
+       // for($i=1; $i<=2; $i++){
+        
+        // Session::set('sess_BP_Chd_'.$i,$this->getTexto('mL_child_'.$i));
+            
+        //}
+        
+        Session::set('sess_pBP_cntHab',$this->getTexto('ML_cmbHab'));  
+ 
 
         $this->redireccionar('sistema/buscarHoteles');
     }

@@ -20,6 +20,7 @@ class sistemaController extends Controller {
         $this->_agencia = $this->loadModel('agencia');
         $this->_usuarios = $this->loadModel('usuario');
         $this->_booking = $this->loadModel('booking');
+        $this->_carro = $this->loadModel('carro');
     }
 
     public function index() {
@@ -78,7 +79,7 @@ class sistemaController extends Controller {
         $this->_view->renderizaSistema('pagina2');
         //header('Location: ' . BASE_URL . 'confirmar');
     }
-
+##########hotelControler#####################
     public function hoteles() {
         Session::acceso('Usuario');
         //$hotel= $this->loadModel('hotel');
@@ -469,6 +470,28 @@ class sistemaController extends Controller {
         }
     }
 
+     public function buscarHoteles() {
+        Session::acceso('Usuario');
+
+
+        /* BEIGN: Paginador; */
+        $pagina = 0;
+        $pagina = $this->filtrarInt($pagina);
+        $this->getLibrary('paginador');
+        $paginador = new Paginador();
+        /* $this->_view->getHoteles=$paginador->paginar($hoteles->getHoteles(), $pagina); */
+        //$this->_view->paginacion = $paginador->getView('prueba', 'sistema/buscarHoteles');
+        /* END: Paginador; */
+
+
+        $this->_view->currentMenu = 8;
+        $this->_view->titulo = 'ORISTRAVEL';
+        $this->_view->renderizaSistema('buscarHoteles');
+    }
+    
+#######################fin hotelControler###########################
+    
+###################### programaControler############################   
     public function adminProgramas() {
         Session::acceso('Usuario');
         $this->_view->setJs(array('ajax'));
@@ -557,7 +580,7 @@ class sistemaController extends Controller {
         }
         //$this->redireccionar('sistema/adminProgramas');
     }
-
+#####################imagenesController#######################
     public function imagenes() {
         Session::acceso('Usuario');
 
@@ -570,117 +593,18 @@ class sistemaController extends Controller {
         $this->_view->titulo = 'ORISTRAVEL';
         $this->_view->renderizaSistema('imagenes');
     }
-
-    public function consultarBooking($pagina = false) {
-        Session::acceso('Usuario');
-
-        $this->_view->objCiudadesHotel = $this->_hotel->getCiudadesHot();
-        $this->_view->objCiudadesServ = $this->_servicio->getCiudadesServ();
-        $this->_view->objCiudadesPRG = $this->_programa->getCiudadesPRG();
-
-
-        $this->_view->CR_fechaDesde = date('d/m/Y');
-        if (Session::get('sess_pCR_fechaDesde')) {
-            $this->_view->CR_fechaDesde = Session::get('sess_pCR_fechaDesde');
-        }
-
-
-        $this->_view->rdbRes = false;
-        $this->_view->rdbVia = false;
-        $this->_view->CR_fechaHasta = Funciones::sumFecha(date('d/m/Y'), 0, 3);
-        if (Session::get('sess_pCR_tipoFecha') == 1) {
-            $this->_view->rdbRes = 'checked';
-        } else {
-            $this->_view->rdbVia = 'checked';
-        }
-        $this->_view->getBookings = $this->_booking->getConsRes(
-                Funciones::invertirFecha(Session::get('sess_pCR_fechaDesde'), '/', '-'), Funciones::invertirFecha(Session::get('sess_pCR_fechaHasta'), '/', '-'), Session::get('sess_pCR_tipoFecha'), Session::get('sess_id_agencia'), Session::getLevel('Admin'), Session::get('sess_usuario')
-        );
-
-
-
-        /* BEIGN: Paginador; */
-        $pagina = $this->filtrarInt($pagina);
-        $this->getLibrary('paginador');
-        $paginador = new Paginador();
-        /* $this->_view->getBookings=$paginador->paginar($booking->getConsRes(
-          Funciones::invertirFecha(Session::get('sess_pCR_fechaDesde'), '/', '-'),
-          Funciones::invertirFecha(Session::get('sess_pCR_fechaHasta'), '/', '-'),
-          Session::get('sess_pCR_tipoFecha'),
-          Session::get('sess_id_agencia'),
-          Session::getLevel('Admin'),
-          Session::get('sess_usuario')
-          ), $pagina); */
-        $this->_view->paginacion = $paginador->getView('prueba', 'sistema/consultarBooking');
-        /* END: Paginador; */
-
-
-
-        $this->_view->currentMenu = 1;
-        $this->_view->titulo = 'ORISTRAVEL';
-        $this->_view->renderizaSistema('consultarBooking');
-    }
-
-    public function anularBooking() {
-        Session::acceso('Usuario');
-
-        $this->_view->objCiudadesHotel = $this->_hotel->getCiudadesHot();
-        $this->_view->objCiudadesServ = $this->_servicio->getCiudadesServ();
-        $this->_view->objCiudadesPRG = $this->_programa->getCiudadesPRG();
-
-
-        $this->_view->CR_fechaDesde = date('d/m/Y');
-        if (Session::get('sess_pCR_fechaDesde')) {
-            $this->_view->CR_fechaDesde = Session::get('sess_pCR_fechaDesde');
-        }
-
-        $this->_view->rdbRes = false;
-        $this->_view->rdbVia = false;
-        $this->_view->CR_fechaHasta = Funciones::sumFecha(date('d/m/Y'), 0, 3);
-        if (Session::get('sess_pCR_tipoFecha') == 1) {
-            $this->_view->rdbRes = 'checked';
-        } else {
-            $this->_view->rdbVia = 'checked';
-        }
-
-        $booking = $this->loadModel('booking');
-
-        $this->_view->getBookings = $booking->getConsRes(
-                Funciones::invertirFecha(Session::get('sess_pCR_fechaDesde'), '/', '-'), Funciones::invertirFecha(Session::get('sess_pCR_fechaHasta'), '/', '-'), Session::get('sess_pCR_tipoFecha'), Session::get('sess_id_agencia'), Session::getLevel('Admin'), Session::get('sess_usuario')
-        );
-
-
-
-        /* BEIGN: Paginador; */
-        $pagina = 0;
-        $pagina = $this->filtrarInt($pagina);
-        $this->getLibrary('paginador');
-        $paginador = new Paginador();
-        /* $this->_view->getBookings=$paginador->paginar($booking->getConsRes(
-          Funciones::invertirFecha(Session::get('sess_pCR_fechaDesde'), '/', '-'),
-          Funciones::invertirFecha(Session::get('sess_pCR_fechaHasta'), '/', '-'),
-          Session::get('sess_pCR_tipoFecha'),
-          Session::get('sess_id_agencia'),
-          Session::getLevel('Admin'),
-          Session::get('sess_usuario')
-          ), $pagina); */
-        $this->_view->paginacion = $paginador->getView('prueba', 'sistema/consultarBooking');
-        /* END: Paginador; */
-
-
-
-        $this->_view->currentMenu = 6;
-        $this->_view->titulo = 'ORISTRAVEL';
-        $this->_view->renderizaSistema('anularBooking');
-    }
-
+########################carroController########################
     public function carro() {
         Session::acceso('Usuario');
+        
         $this->_view->currentMenu = false;
         $this->_view->titulo = 'ORISTRAVEL';
-        $this->_view->renderizaSistema('carro');
-    }
-
+        
+        $this->_view->objCarro = $this->_carro->getAddCarro(Session::get('sess_usuario'));
+        
+        $this->_view->renderizaSistema('carro');       
+    }              
+########################contactoController###################################
     public function contactenos() {
         Session::acceso('Usuario');
         $this->_view->currentMenu = 7;
@@ -751,7 +675,7 @@ class sistemaController extends Controller {
             }
         }
     }
-
+###############################usuarioController################################
     public function usuarios() {
         Session::acceso('Usuario');
 
@@ -909,27 +833,11 @@ class sistemaController extends Controller {
         
     }
 
-    public function buscarHoteles() {
-        Session::acceso('Usuario');
-
-
-        /* BEIGN: Paginador; */
-        $pagina = 0;
-        $pagina = $this->filtrarInt($pagina);
-        $this->getLibrary('paginador');
-        $paginador = new Paginador();
-        /* $this->_view->getHoteles=$paginador->paginar($hoteles->getHoteles(), $pagina); */
-        //$this->_view->paginacion = $paginador->getView('prueba', 'sistema/buscarHoteles');
-        /* END: Paginador; */
-
-
-        $this->_view->currentMenu = 8;
-        $this->_view->titulo = 'ORISTRAVEL';
-        $this->_view->renderizaSistema('buscarHoteles');
-    }
+   
+################################ fin usuarioController###########################  
+ 
     
-    
-    
+    ################################### imagenesController#####################################
 public function logoVoucher(){
 Session::acceso('Usuario');
 
@@ -1025,6 +933,58 @@ $this->_view->renderizaCenterBox('logoVoucher');
             throw new Exception('Error inesperado, intente nuevamente. Si el error persiste comuniquese con el administrador');
         }
     }
+  #####################fin imagenesController################################
+    
+  ############################ bookingController #############################  
+    public function consultarBooking($pagina = false) {
+        Session::acceso('Usuario');
+
+        $this->_view->objCiudadesHotel = $this->_hotel->getCiudadesHot();
+        $this->_view->objCiudadesServ = $this->_servicio->getCiudadesServ();
+        $this->_view->objCiudadesPRG = $this->_programa->getCiudadesPRG();
+
+
+        $this->_view->CR_fechaDesde = date('d/m/Y');
+        if (Session::get('sess_pCR_fechaDesde')) {
+            $this->_view->CR_fechaDesde = Session::get('sess_pCR_fechaDesde');
+        }
+
+
+        $this->_view->rdbRes = false;
+        $this->_view->rdbVia = false;
+        $this->_view->CR_fechaHasta = Funciones::sumFecha(date('d/m/Y'), 0, 3);
+        if (Session::get('sess_pCR_tipoFecha') == 1) {
+            $this->_view->rdbRes = 'checked';
+        } else {
+            $this->_view->rdbVia = 'checked';
+        }
+        $this->_view->getBookings = $this->_booking->getConsRes(
+                Funciones::invertirFecha(Session::get('sess_pCR_fechaDesde'), '/', '-'), Funciones::invertirFecha(Session::get('sess_pCR_fechaHasta'), '/', '-'), Session::get('sess_pCR_tipoFecha'), Session::get('sess_id_agencia'), Session::getLevel('Admin'), Session::get('sess_usuario')
+        );
+
+
+
+        /* BEIGN: Paginador; */
+        $pagina = $this->filtrarInt($pagina);
+        $this->getLibrary('paginador');
+        $paginador = new Paginador();
+        /* $this->_view->getBookings=$paginador->paginar($booking->getConsRes(
+          Funciones::invertirFecha(Session::get('sess_pCR_fechaDesde'), '/', '-'),
+          Funciones::invertirFecha(Session::get('sess_pCR_fechaHasta'), '/', '-'),
+          Session::get('sess_pCR_tipoFecha'),
+          Session::get('sess_id_agencia'),
+          Session::getLevel('Admin'),
+          Session::get('sess_usuario')
+          ), $pagina); */
+        $this->_view->paginacion = $paginador->getView('prueba', 'sistema/consultarBooking');
+        /* END: Paginador; */
+
+
+
+        $this->_view->currentMenu = 1;
+        $this->_view->titulo = 'ORISTRAVEL';
+        $this->_view->renderizaSistema('consultarBooking');
+    }
     
     public function reservaBooking(){
     Session::acceso('Usuario');
@@ -1061,78 +1021,7 @@ $this->_view->renderizaCenterBox('logoVoucher');
 
     
     }
-    
-    public function generarExcel(){
-        Session::acceso('Usuario');
-        $this->getLibrary('phpExcel' . DS . 'PHPExcel');
-        $objPHPExcel = new PHPExcel();
-        $objPHPExcel->getProperties()->setCreator("Codedrinks") // Nombre del autor
-        ->setLastModifiedBy("Codedrinks") //Ultimo usuario que lo modificó
-        ->setTitle("Reporte Excel con PHP y MySQL") // Titulo
-        ->setSubject("Reporte Excel con PHP y MySQL") //Asunto
-        ->setDescription("Reporte Oris") //Descripción
-        ->setKeywords("reporte alumnos carreras") //Etiquetas
-        ->setCategory("Reporte excel"); //Categorias
-        
-        
-        $tituloReporte = "Negocios Oris";
-        
-       $objPHPExcel->setActiveSheetIndex(0)
-       ->setCellValue('A1',  $tituloReporte);
-        
-        $titulosColumnas = array('Negocio', 'Estado', 'Fecha', 'Fecha In', 'Nombre Cliente', 'Vendedor', 'Nombre Pasajero', 'Moneda', 'Total');
-        $objPHPExcel->setActiveSheetIndex(0)
-        ->mergeCells('A1.I1');
-            $objPHPExcel->setActiveSheetIndex(0)
-             ->setCellValue('A1',  $titulosColumnas[0])  
-             ->setCellValue('B1',  $titulosColumnas[1])
-             ->setCellValue('C1',  $titulosColumnas[2])
-             ->setCellValue('D1',  $titulosColumnas[3])
-             ->setCellValue('E1',  $titulosColumnas[4])
-             ->setCellValue('F1',  $titulosColumnas[5])
-             ->setCellValue('G1',  $titulosColumnas[6])
-             ->setCellValue('H1',  $titulosColumnas[7])
-             ->setCellValue('I1',  $titulosColumnas[8]);
-             
-        $i=1;
-        $j= $i+1;
-        $k=j+1;
-        $l=k+1;
-        
-        $objBooking = $this->_booking->getConsRes(
-                Funciones::invertirFecha(Session::get('sess_pCR_fechaDesde'), '/', '-'), Funciones::invertirFecha(Session::get('sess_pCR_fechaHasta'), '/', '-'), Session::get('sess_pCR_tipoFecha'), Session::get('sess_id_agencia'), Session::getLevel('Admin'), Session::get('sess_usuario')
-        );
 
-        
-        foreach($objBooking as $objb){
-            $objPHPExcel->setActiveSheetIndex(0) 
-                ->setCellValue('A'.$j, $objb->getId())
-                ->setCellValue('B'.$j, $objb->getEstado())
-                ->setCellValue('C'.$j, $objb->getFecha())
-                ->setCellValue('D'.$j, $objb->getFechaIn())
-                ->setCellValue('E'.$j, $objb->getAgencia())
-                ->setCellValue('F'.$j, $objb->getNombreUser().$objb->getApellidoUser())
-                ->setCellValue('G'.$j, $objb->getNomPax())
-                ->setCellValue('H'.$j, $objb->getMoneda())
-                ->setCellValue('I'.$j, $objb->getTotal());
-            
-            $i++;
-             $objDBooking = $this->_booking->getDBooking($objb->getId());
-             foreach($objDBooking as $objdb){
-                $objPHPExcel->setActiveSheetIndex(0)
-                        ->setCellValue('B'.$k, $objdb->getEstado());
-              $i++;
-              $k++;
-             }
-        }
-           header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="ReporteOris.xlsx"');
-        header('Cache-Control: max-age=0');
-        
-        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
-        $objWriter->save('php://output');
-        
-    }
     public function crearExcel(){
     header ("Last-Modified: " . gmdate("D,d M YH:i:s") . " GMT");  
     header ("Cache-Control: no-cache, must-revalidate");  
@@ -1205,7 +1094,98 @@ $this->_view->renderizaCenterBox('logoVoucher');
               echo "\n";
              }   
         }
+         public function anularBooking() {
+        Session::acceso('Usuario');
 
+        $this->_view->objCiudadesHotel = $this->_hotel->getCiudadesHot();
+        $this->_view->objCiudadesServ = $this->_servicio->getCiudadesServ();
+        $this->_view->objCiudadesPRG = $this->_programa->getCiudadesPRG();
+        
+        
+        $this->_view->CR_fechaDesde = date('d/m/Y');
+        if (Session::get('sess_pCR_fechaDesde')) {
+            $this->_view->CR_fechaDesde = Session::get('sess_pCR_fechaDesde');
+        }
+
+        $this->_view->rdbRes = false;
+        $this->_view->rdbVia = false;
+        $this->_view->CR_fechaHasta = Funciones::sumFecha(date('d/m/Y'), 0, 3);
+        if (Session::get('sess_pCR_tipoFecha') == 1) {
+            $this->_view->rdbRes = 'checked';
+        } else {
+            $this->_view->rdbVia = 'checked';
+        }
+
+        $booking = $this->loadModel('booking');
+
+        $this->_view->getBookings = $booking->getConsRes(
+                Funciones::invertirFecha(Session::get('sess_pCR_fechaDesde'), '/', '-'), Funciones::invertirFecha(Session::get('sess_pCR_fechaHasta'), '/', '-'), Session::get('sess_pCR_tipoFecha'), Session::get('sess_id_agencia'), Session::getLevel('Admin'), Session::get('sess_usuario')
+        );
+
+
+
+        /* BEIGN: Paginador; */
+        $pagina = 0;
+        $pagina = $this->filtrarInt($pagina);
+        $this->getLibrary('paginador');
+        $paginador = new Paginador();
+        /* $this->_view->getBookings=$paginador->paginar($booking->getConsRes(
+          Funciones::invertirFecha(Session::get('sess_pCR_fechaDesde'), '/', '-'),
+          Funciones::invertirFecha(Session::get('sess_pCR_fechaHasta'), '/', '-'),
+          Session::get('sess_pCR_tipoFecha'),
+          Session::get('sess_id_agencia'),
+          Session::getLevel('Admin'),
+          Session::get('sess_usuario')
+          ), $pagina); */
+        $this->_view->paginacion = $paginador->getView('prueba', 'sistema/consultarBooking');
+        /* END: Paginador; */
+
+
+
+        $this->_view->currentMenu = 6;
+        $this->_view->titulo = 'ORISTRAVEL';
+        $this->_view->renderizaSistema('anularBooking');
+    }
+    
+    public function generaVoucherPdf($id){
+    Session::acceso('Usuario');
+    $this->getLibrary('fpdf');
+    $pdfVou = new FPDF();
+    $pdfVou->AddPage();
+    $pdfVou->SetFont('Arial','B','11');
+    $pdfVou->Cell(40,10,'Hola');
+    $pdfVou->Output();   
+    }
+    
+    
+    public function paso3(){
+    Session::acceso('Usuario');
+    //if (strtolower($this->getServer('HTTP_X_REQUESTED_WITH')) == 'xmlhttprequest') {
+    //$this->_view->carrAdltNombre = $this->getTexto('Carr_txtNombrePas_1_1');
+    $carrAdlNombre = array();
+    $carrAdlApellido = array();
+    
+    if(Session::get('sess_pBP_cntHab')){
+        for($i = 1; $i<=Session::get('sess_pBP_cntHab'); $i++){
+                                                        
+                                                    
+                if(Session::get('sess_BP_Adl_'.$i)){
+                       for($j = 1; $j <= Session::get('sess_BP_Adl_'.$i) ; $j++){
+                            $carrAdlNombre[] = $this->getTexto('Carr_txtNombrePas_'.$i.'_'.$j);
+                            $carrAdlApellido[] = $this->getTexto('Carr_txtApellidoPas_'.$i.'_'.$j);   
+                       } 
+                }                 
+        }
+         $this->_view->carrAdlNombre = $carrAdlNombre;
+         $this->_view->carrAdlApellido= $carrAdlApellido;
+         
+    //}
+         $this->_view->renderizaCenterBox('paso3');
+     
+    }
+    
+   
+    } 
 /*     * *****************************************************************************
      *                                                                              *
      *                             METODOS PROCESADORES                             *

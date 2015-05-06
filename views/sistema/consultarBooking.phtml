@@ -89,7 +89,7 @@ $(function()
                                            if(Session::get('sess_pCR_fechaDesde')){
                                            ?>
                                            <td><th width="10%"></th></td>
-                                           <td> <center><img width="50" height="50" src="<?php echo $_layoutParams['ruta_img']; ?>excel.png"></center><br>
+                                           <td> <center><img width="40" height="40" src="<?php echo $_layoutParams['ruta_img']; ?>excel.png"></center><br>
                                                <a href="<?php echo BASE_URL ?>sistema/crearExcelDet" >Generar Excel con Detalle </a>| 
                                                 <a href="<?php echo BASE_URL ?>sistema/crearExcel">Generar Excel sin Detalle </a></td>
                                             
@@ -212,7 +212,7 @@ $(function()
                                                         
                                                         if($cR_voucher=='S')
                                                         {
-                                                            $voucherStatus='<a href="' . BASE_URL . 'sistema/verPDF/'.$cR_booking.'" target="_blank">
+                                                            $voucherStatus='<a href="' . BASE_URL . 'sistema/generaVoucherPdf/'.$cR_booking.'" target="_blank">
                                                             <img src="'.$_layoutParams['ruta_img'].'pdf.png" alt="edit" width="24" border="0" />
                                                             </a>';
                                                         }

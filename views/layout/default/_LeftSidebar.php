@@ -216,7 +216,7 @@ $(function()
                                                 <td>
                                                     <select name="mL_cmbAdultos_<?php echo $i; ?>" id="mL_cmbAdultos_<?php echo $i; ?>">
                                                       <?php
-                                                          for($x=1; $x<=6; $x++)
+                                                          for($x=1; $x<=4; $x++)
                                                           { 
                                                               if(Session::get('sess_BP_Adl_' . $i) == $x)
                                                               { ?>
