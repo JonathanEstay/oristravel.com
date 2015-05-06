@@ -1159,31 +1159,36 @@ $this->_view->renderizaCenterBox('logoVoucher');
     
     
     public function paso3(){
-    Session::acceso('Usuario');
-    //if (strtolower($this->getServer('HTTP_X_REQUESTED_WITH')) == 'xmlhttprequest') {
-    //$this->_view->carrAdltNombre = $this->getTexto('Carr_txtNombrePas_1_1');
-    $carrAdlNombre = array();
-    $carrAdlApellido = array();
-    
-    if(Session::get('sess_pBP_cntHab')){
-        for($i = 1; $i<=Session::get('sess_pBP_cntHab'); $i++){
-                                                        
-                                                    
-                if(Session::get('sess_BP_Adl_'.$i)){
-                       for($j = 1; $j <= Session::get('sess_BP_Adl_'.$i) ; $j++){
-                            $carrAdlNombre[] = $this->getTexto('Carr_txtNombrePas_'.$i.'_'.$j);
-                            $carrAdlApellido[] = $this->getTexto('Carr_txtApellidoPas_'.$i.'_'.$j);   
-                       } 
-                }                 
+        Session::acceso('Usuario');
+        if (strtolower($this->getServer('HTTP_X_REQUESTED_WITH')) == 'xmlhttprequest') {
+            //$this->_view->carrAdltNombre = $this->getTexto('Carr_txtNombrePas_1_1');
+            $carrAdlNombre = array();
+            $carrAdlApellido = array();
+
+
+            if(Session::get('sess_pBP_cntHab')){
+                for($i = 1; $i<=Session::get('sess_pBP_cntHab'); $i++){
+
+
+                        if(Session::get('sess_BP_Adl_'.$i)){
+                               for($j = 1; $j <= 1 ; $j++){
+                                    $carrAdlNombre[] = $this->getTexto('Carr_txtNombrePas_'.$i.'_'.$j);
+                                    $carrAdlApellido[] = $this->getTexto('Carr_txtApellidoPas_'.$i.'_'.$j);   
+                               } 
+                        }                 
+                }
+                
+                $prgObj = new programaDTO();                
+                $carrAdlNombre[] = $prgObj;
+                $carrAdlApellido[] = $prgObj;
+                $this->_view->carrAdlNombre = $carrAdlNombre;
+                $this->_view->carrAdlApellido= $carrAdlApellido;
+
+
+                 $this->_view->renderizaCenterBox('paso3');
+            }
         }
-         $this->_view->carrAdlNombre = $carrAdlNombre;
-         $this->_view->carrAdlApellido= $carrAdlApellido;
-         
-    //}
-         $this->_view->renderizaCenterBox('paso3');
-     
-    }
-    
+    //$this->_view->renderizaCenterBox('paso3');
    
     } 
 /*     * *****************************************************************************

@@ -193,6 +193,8 @@
                                              <div class="panel panel-info" id="div_paso3">
                                                  
                                             </div>
+                                            
+                                            <input type="submit" class="finish btn-success btn" style="display: none;" value="Reservar" />
                                         </fieldset>
                                     </div>
                                 </div>
@@ -246,6 +248,19 @@ $('#btnSig_P2').on('click',function(){
         $('#basicwizard-step-2').css('display', 'block');
 });
 
+
+$('#btnAtr_P3').on('click',function(){
+        $('#basicwizard-head-2').removeClass('stepy-active');
+        $('#basicwizard-step-2').css('display', 'none');
+        
+       
+        
+        $('#basicwizard-head-1').addClass('stepy-active');
+        $('#basicwizard-step-1').css('display', 'block');
+});
+
+
+
 function carroAdl(url){
  var formData = new FormData($(".frm_paso2")[0]);
         $.ajax({
@@ -259,22 +274,14 @@ function carroAdl(url){
              },
              success:function(data)
              {
-                 alert("ok");
                  $("#div_paso3").html(data);
-             }
+             },
+             
+            error: function ()
+            {
+                alert("Error");
+            }
          });   
  
 }
-
-
-
-$('#btnAtr_P3').on('click',function(){
-        $('#basicwizard-head-2').removeClass('stepy-active');
-        $('#basicwizard-step-2').css('display', 'none');
-        
-       
-        
-        $('#basicwizard-head-1').addClass('stepy-active');
-        $('#basicwizard-step-1').css('display', 'block');
-});
 </script>
