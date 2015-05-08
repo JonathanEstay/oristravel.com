@@ -1,6 +1,4 @@
 
-
-   
         <div class="panel-heading">
             <center><h3>Reserva</h3></center>
 
@@ -26,14 +24,14 @@
                                
                                 <table style="font-size: 12px; margin-top: 20px;">
                                         <tr>
-                                            <th width="35%">Cliente:</th>
+                                            <th width="35%">Cliente: </th>
                                             <td>
-                                                
+                                             <?php echo' '.Session::get('sess_usuario'); ?>   
                                             </td>
                                             <th width="5%"></th>
-                                            <th width="35%">  Usuario:</th>
+                                            <th width="35%">  Usuario: </th>
                                             <td>
-                                              
+                                              <?php echo' '.Session::get('sess_nombre').' '.Session::get('sess_apellido'); ?>
                                             </td>
                                             <th></th>
                                             
@@ -41,10 +39,10 @@
                                         <tr>
 
                                             <th>Pasajero:</th>
-                                            <td></td>
+                                            <td><?php if($this->objNombrePax & $this->objApellidoPax){ echo $this->objNombrePax.' '.$this->objApellidoPax;}?></td>
                                             <th width="5%"></th>
                                             <th>Fecha In:</th>
-                                            <td></td>
+                                            <td><?php echo date('d/m/Y'); ?></td>
                                         </tr>
                                         
 
@@ -77,7 +75,7 @@
                                                                         <th>Fecha Out</th>
                                                                         <th>Vuelo</th>
                                                                         <th>Total</th>
-                                                                        <th></th>
+                                                                        
                                                                     </tr>
                                                                 </thead>
                                                                   <?php
@@ -101,7 +99,7 @@
                                                                                 <td class="text-muted"><?php if($objCar->getFecha_out()=='0000-00-00'){echo "";} else {echo Funciones::invertirFecha($objCar->getFecha_out(),'-','/');} ?></td>
                                                                                 <td><?php echo $objCar->getVuelo() ?></td>
                                                                                 <td style="color: #DF5F00; font-weight: bold;"><?php echo $objCar->getTotal() ?></td>                                                                               
-                                                                                <td></td>
+                                                                                
                                                                             </tr>
                                                                             
                                                                 
@@ -111,7 +109,7 @@
                                                                             <tr>
                                                                                 <td colspan="12" align="right">Total</td>
                                                                                 <td style="color: #DF5F00; font-weight: bold;"><?php echo $totalCompras+=$objCar->getTotal()?></td>
-                                                                                <td></td>
+                                                                                
                                                                             </tr>
                                                                         </tbody>
                                                                         
@@ -136,53 +134,85 @@
                                                    
                                                      </div>
 
-                                <div class="panel-heading">
+                                
+                                <table class="table table-condensed" style="font-size:12px;"> 
+                                    <div class="panel-heading">
                                     <center><h3>Detalle Pasajeros</h3></center>
                                     
 
-                                </div>
-                                <table class="table table-condensed" style="font-size:12px;">
-                               
-                                            <?php
-                                                    if(Session::get('sess_pBP_cntHab')){
-                                                    for($i = 1; $i<=Session::get('sess_pBP_cntHab'); $i++){
-                                             ?>
-                                                        <thead>
-                                                        <tr>
-                                                            <th width="100">Habitaci&oacute;n <?php echo $i ?></th>
-                                                            <th>Nombres</th>
-                                                            <th>Apellidos</th>
-                                                        </tr>
-                                                       </thead>
+                                     </div>
                                                         <?php
-                                                        for($j=1; $j<=$this->carrAdlNombre; $j++){
-                                                        ?>
+                                                        if($this->objPaxCarro){
+                                                            $contHab=1;
+                                                            $contHabAnt=0;
+                                                            $contAd=0;
+                                                           foreach($this->objPaxCarro as $objCarro){                                                       
+                                                            //echo Session::get('sess_BP_Adl_'.$objCarro->getHabitacion());
+                                                               $contHabAnt = $objCarro->getHabitacion();
+                                                              if($contHab == $contHabAnt){
+                                                                  
+                                                               ?>
                                                                     <tr>
-                                                                      <th>Adulto <?php echo $j;?></th>
+                                                                        <th width="100">Habitaci&oacute;n <?php echo $objCarro->getHabitacion() ?></th>
+                                                                        <th>Nombres</th>
+                                                                        <th></th>
+                                                                        <th>Apellidos</th>
+                                                                        <th></th>
+                                                                        <th></th>
+                                                                    </tr>                   
+                                                               <?php                                                             
+                                                                $contAd=0;
+                                                                $contHab++;
+                                                              }
+                                                             
+                                                              else{
+                                                              $contAd++;
+                                                                
+                                                              }
+                                                             
+                                                              
+                                                               if($contAd <= Session::get('sess_BP_Adl_'.$objCarro->getHabitacion())){                                                                                   
+                                                                   
+                                                                   ?> 
+                                                                    
+                                                                    <tr>
+                                                                      <td>Adulto <?php echo $contAd+1; ?></td>
                                                                       <td>Nombre</td>                             
-                                                                      <td><?php echo $this->carrAdlNombre[$j]; ?></td> 
-                                                                   <?php
-                                                        }
-                                                        for($k=1; $k<=$this->carrAdlApellido; $k++){
-                                                                   ?>
+                                                                      <td><?php echo $objCarro->getNombre(); ?></td> 
+                                                                   
                                                                       <td>Apellido</td> 
-                                                                      <td><?php $this->carrAdlApellido[$k];?></td> 
+                                                                      <td><?php echo $objCarro->getApellido();?></td> 
                                                                       <td></td> 
-                                                                    </tr>                       
-                                                     <?php
+                                                                    </tr> 
+                                                                        <?php   
+                                                               }
+                                                              
+                                                               
+                                                               
                                                         }
-                                                        } 
-                                                    }
-                                                    //Session::destroy('sess_BP_Adl_1');
-                                                    //Session::destroy('sess_BP_Adl_2');
-                                                    //Session::destroy('sess_BP_Adl_3');
-                                                    //Session::destroy('sess_BP_Adl_4');
+                                                        
+
                                                ?>
                                                                     
                                                                     <div>
                                                                         
                                                                     </div>
              
+                                </table>
+                                
+                                <table class="table table"  >
+                                    <?php
+                                    if($this->objTextoArea!= "")
+                                                        ?>
+                                    <th width="10%"></th>
+                                    <th witdh="50%"></th>
+                                         <tr>
+                                              <td><strong>Nota: </strong> </td>                                                      
+                                              <td><?php echo $this->objTextoArea; ?> </td>
+                                         </tr>            
+                                                        <?php
+                                                        }
+                                                        ?>
                                 </table>
                                 
                                 
@@ -198,4 +228,21 @@
         <input type="submit" class="finish btn-success btn" value="Reservar" />
     </span>
     <br>
-                                        
+ <?php
+ 
+ ?>
+    <script>
+     $('#btnAtr_P3').on('click',function(){
+        $('#basicwizard-head-2').removeClass('stepy-active');
+        $('#basicwizard-step-2').css('display', 'none');
+        
+       
+        
+        $('#basicwizard-head-1').addClass('stepy-active');
+        $('#basicwizard-step-1').css('display', 'block');
+});   
+     </script>
+ <?php
+
+
+ ?>
