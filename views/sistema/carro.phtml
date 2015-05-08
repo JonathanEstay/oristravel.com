@@ -96,6 +96,10 @@
                                                                             </tr>
                                                                         </tbody>
                                                                         </table>
+                                                                             <span class="pull-right">
+                                                                                <input type="button" class="finish btn-primary btn" id="btnSig_P1" value="Siguiente" />
+                                                                            </span>
+                                                             <br> 
                                                                  <?php
                                                                  ?>
                                                             
@@ -108,19 +112,13 @@
                                                                             <td>
                                                                         <center><strong>No se encontraron reservas.</strong></center>
                                                                             </td>
-                                                                        </tr>
-                                                                                                                                    </table>
+                                                                        </tr>                                                             
                                                             </table>
-                                                        
-
                                                                 <?php   
                                                                }
                            
                                                                 ?>
-                                                           <span class="pull-right">
-                                                                                <input type="button" class="finish btn-primary btn" id="btnSig_P1" value="Siguiente" />
-                                                                            </span>
-                                                                            <br>      
+                                                               
                                                         </div>
                                             
                                         </fieldset>
@@ -182,7 +180,7 @@
                                             
                                             <span class="pull-right">
                                                 <input type="button" class="finish btn-default btn" id="btnAtr_P2" value="Atras" />
-                                                <input type="button" class="finish btn-primary btn" id="btnSig_P2" value="Siguiente" onclick="carroAdl('<?php echo BASE_URL?>sistema/paso3');" />
+                                                <input type="button" class="finish btn-primary btn" id="btnSig_P2" value="Siguiente"/>
                                             </span>
                                             <br>
                                             </form>
@@ -206,12 +204,6 @@
                     
                 </div>
             </div>
-
-            
-
-
-			
-
         </div> <!-- container -->
     </div> <!--wrap -->
 </div> <!-- page-content -->
@@ -236,21 +228,11 @@ $('#btnAtr_P2').on('click',function(){
         $('#basicwizard-step-0').css('display', 'block');
         
 });
-$('#btnSig_P2').on('click',function(){
-        $('#basicwizard-head-1').removeClass('stepy-active');
-        $('#basicwizard-step-1').css('display', 'none');
-        
-        //var a = $('#carroTable').html();
-        //$('#carroTableDet').html(a);
-        $('#basicwizard-head-2').addClass('stepy-active');
-        $('#basicwizard-step-2').css('display', 'block');
-});
-
-function carroAdl(url){
- var formData = new FormData($(".frm_paso2")[0]);
+$('#btnSig_P2').on('click',function(){  
+         var formData = new FormData($(".frm_paso2")[0]);
         $.ajax({
              type:"POST", 
-             url:url,
+             url:'<?php echo BASE_URL?>sistema/paso3',
              data:formData,
              cache: false,
              contentType: false,
@@ -259,22 +241,20 @@ function carroAdl(url){
              },
              success:function(data)
              {
-                 alert("ok");
-                 $("#div_paso3").html(data);
+                 if(data =="Error"){
+                  noExito("Ingrese todos los datos"); 
+                 }
+                 else{
+                        $("#div_paso3").html(data);
+                 
+                        $('#basicwizard-head-1').removeClass('stepy-active');
+                        $('#basicwizard-step-1').css('display', 'none');
+
+                        $('#basicwizard-head-2').addClass('stepy-active');
+                        $('#basicwizard-step-2').css('display', 'block');
+                 }
              }
-         });   
- 
-}
-
-
-
-$('#btnAtr_P3').on('click',function(){
-        $('#basicwizard-head-2').removeClass('stepy-active');
-        $('#basicwizard-step-2').css('display', 'none');
-        
-       
-        
-        $('#basicwizard-head-1').addClass('stepy-active');
-        $('#basicwizard-step-1').css('display', 'block');
+         }); 
+                
 });
 </script>

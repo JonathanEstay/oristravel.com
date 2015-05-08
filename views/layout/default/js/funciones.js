@@ -423,14 +423,14 @@ function exito() {//
 }
 function noExito(data) {
     endLoad();
-    $('#divAlertWar').delay(1000).fadeIn(500);
+    $('#divAlertWar').delay(500).fadeIn(500);
     $('#divAlertWar').animate({
     
         'display': 'block'
     });
     $("#msjWar").html(data);    
 
-    $('#divAlertWar').delay(1000).fadeOut(500);
+    $('#divAlertWar').delay(500).fadeOut(500);
     $('#divAlertWar').animate({
         'display': 'none'
     });

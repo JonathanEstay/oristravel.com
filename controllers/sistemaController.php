@@ -1162,30 +1162,55 @@ $this->_view->renderizaCenterBox('logoVoucher');
     Session::acceso('Usuario');
     //if (strtolower($this->getServer('HTTP_X_REQUESTED_WITH')) == 'xmlhttprequest') {
     //$this->_view->carrAdltNombre = $this->getTexto('Carr_txtNombrePas_1_1');
-    $carrAdlNombre = array();
-    $carrAdlApellido = array();
-    
-    if(Session::get('sess_pBP_cntHab')){
-        for($i = 1; $i<=Session::get('sess_pBP_cntHab'); $i++){
-                                                        
-                                                    
-                if(Session::get('sess_BP_Adl_'.$i)){
-                       for($j = 1; $j <= Session::get('sess_BP_Adl_'.$i) ; $j++){
-                            $carrAdlNombre[] = $this->getTexto('Carr_txtNombrePas_'.$i.'_'.$j);
-                            $carrAdlApellido[] = $this->getTexto('Carr_txtApellidoPas_'.$i.'_'.$j);   
-                       } 
-                }                 
-        }
-         $this->_view->carrAdlNombre = $carrAdlNombre;
-         $this->_view->carrAdlApellido= $carrAdlApellido;
-         
-    //}
-         $this->_view->renderizaCenterBox('paso3');
+    $objCarrPax = array();
+            if(Session::get('sess_pBP_cntHab')){
+                for($i = 1; $i<=Session::get('sess_pBP_cntHab'); $i++){
+
+
+                        if(Session::get('sess_BP_Adl_'.$i)){
+                               for($j = 1; $j <= Session::get('sess_BP_Adl_'.$i); $j++){
+                                    $objCarroPax = new carroDTO();
+                                    
+                                    $objCarroPax->setHabitacion($i);
+                                    if($this->getTexto('Carr_txtNombrePas_'.$i.'_'.$j)!="" & $this->getTexto('Carr_txtApellidoPas_'.$i.'_'.$j)!=""){
+                                    $objCarroPax->setNombre($this->getTexto('Carr_txtNombrePas_'.$i.'_'.$j)); //$this->getTexto('Carr_txtNombrePas_'.$i.'_'.$j);                              
+                                    $objCarroPax->setApellido($this->getTexto('Carr_txtApellidoPas_'.$i.'_'.$j)); //$this->getTexto('Carr_txtApellidoPas_'.$i.'_'.$j);   
+                                     
+                                    $objCarrPax[] = $objCarroPax;
+                                   }
+                                   else{
+ 
+                                       throw new Exception("Error") ;          
+                                      
+                                   }
+                                    
+                                }
+                                 
+                        }
+                }
+                
+               
+                $this->_view->objTextoArea = $this->getTexto('Carr_textAreaNota');
+                $this->_view->objPaxCarro = $objCarrPax;
+                if($objCarroPax){
+                $this->_view->objNombrePax  =  $objCarrPax[0]->getNombre();
+                $this->_view->objApellidoPax  =  $objCarrPax[0]->getApellido();
+                
+               }
+               else{
+                   echo "asd";
+                   
+               }
+
+            }
+             $this->_view->objCarro = $this->_carro->getAddCarro(Session::get('sess_usuario'));
+
+    $this->_view->renderizaCenterBox('paso3');
      
     }
     
    
-    } 
+     
 /*     * *****************************************************************************
      *                                                                              *
      *                             METODOS PROCESADORES                             *

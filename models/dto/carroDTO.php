@@ -20,7 +20,30 @@ class carroDTO{
     private $_vuelo;
     private $_total;
     private $_status;
+    private $_nombre;//
+    private $_apellido;//
     
+
+        
+    function getNombre() {
+        return $this->_nombre;
+    }
+
+    function getApellido() {
+        return $this->_apellido;
+    }
+
+    function setNombre($nombre) {
+        $this->_nombre = $nombre;
+        return $this;
+    }
+
+    function setApellido($apellido) {
+        $this->_apellido = $apellido;
+        return $this;
+    }
+
+        
     function getStatus() {
         return $this->_status;
     }
