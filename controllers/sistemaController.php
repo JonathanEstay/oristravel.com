@@ -29,6 +29,8 @@ class sistemaController extends Controller {
         $this->_view->objCiudadesHotel = $this->_hotel->getCiudadesHot();
         $this->_view->objCiudadesServ = $this->_servicio->getCiudadesServ();
         $this->_view->objCiudadesPRG = $this->_programa->getCiudadesPRG();
+        
+        $this->_view->objServicios = $this->_servicio->getServicios();
 
         $this->_view->setJs(array('ajax'));
 
@@ -38,7 +40,8 @@ class sistemaController extends Controller {
         /* }
           else
           {
-          $this->_view->mL_expandeFiltros='none';
+          
+         * $this->_view->mL_expandeFiltros='none';
           } */
 
 
@@ -472,8 +475,14 @@ class sistemaController extends Controller {
 
      public function buscarHoteles() {
         Session::acceso('Usuario');
+        $this->_view->setJs(array('ajax'));
+        $this->_view->objCiudadesHotel = $this->_hotel->getCiudadesHot();
+        $this->_view->objCiudadesServ = $this->_servicio->getCiudadesServ();
+        $this->_view->objCiudadesPRG = $this->_programa->getCiudadesPRG();
+        $this->_view->mL_expandeFiltrosHot='block';
+        
 
-
+        
         /* BEIGN: Paginador; */
         $pagina = 0;
         $pagina = $this->filtrarInt($pagina);
@@ -1192,21 +1201,48 @@ $this->_view->renderizaCenterBox('logoVoucher');
                
                 $this->_view->objTextoArea = $this->getTexto('Carr_textAreaNota');
                 $this->_view->objPaxCarro = $objCarrPax;
-                if($objCarroPax){
+               
                 $this->_view->objNombrePax  =  $objCarrPax[0]->getNombre();
                 $this->_view->objApellidoPax  =  $objCarrPax[0]->getApellido();
                 
                }
-               else{
-                   echo "asd";
-                   
-               }
 
-            }
              $this->_view->objCarro = $this->_carro->getAddCarro(Session::get('sess_usuario'));
 
     $this->_view->renderizaCenterBox('paso3');
      
+    }
+    
+    public function buscarServicios(){
+        
+        Session::acceso('Usuario');
+        $this->_view->setJs(array('ajax'));
+        
+        $this->_view->objCiudadesHotel = $this->_hotel->getCiudadesHot();
+        $this->_view->objCiudadesServ = $this->_servicio->getCiudadesServ();
+        $this->_view->objCiudadesPRG = $this->_programa->getCiudadesPRG();
+        
+        $this->_view->objServicios = $this->_servicio->getServicios();
+        
+        $this->_view->currentMenu = 9;
+        $this->_view->titulo = 'ORISTRAVEL';
+        
+      $this->_view->renderizaSistema('buscarServicios');
+    }
+    
+    public function buscarProgramas(){
+       Session::acceso('Usuario');
+       $this->_view->setJs(array('ajax'));      
+       $this->_view->objCiudadesHotel = $this->_hotel->getCiudadesHot();
+       $this->_view->objCiudadesServ = $this->_servicio->getCiudadesServ();
+       $this->_view->objCiudadesPRG = $this->_programa->getCiudadesPRG();
+       
+        $this->_view->objServicios = $this->_servicio->getServicios();
+       
+       $this->_view->currentMenu = 10;
+       $this->_view->titulo = 'ORISTRAVEL'; 
+       $this->_view->renderizaSistema('buscarProgramas');
+       
     }
     
    

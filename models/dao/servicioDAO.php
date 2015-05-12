@@ -44,5 +44,32 @@ class servicioDAO extends Model
             return false;
         }
     }
-
+    
+    public function getServicios(){
+        $sql = 'SELECT numero, nombre FROM tablaser';
+        
+        $serv= $this->_db->consulta($sql);
+        if($this->_db->numRows($serv)> 0){
+            
+            $servArray = $this->_db->fetchAll($serv);
+            $objetosServ = array();
+            
+            foreach($servArray as $objServAr){
+                $servObj = new servicioDTO();
+                
+                $servObj->setNumero(trim($objServAr['numero']));
+                $servObj->setNombre(trim($objServAr['nombre']));
+                
+               $objetosServ[] = $servObj;
+                
+            }
+            
+            return $objetosServ;
+            
+        }
+        else{
+            return false;
+        }
+           
+    }
 }
