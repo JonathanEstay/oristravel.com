@@ -12,7 +12,29 @@ class servicioDTO
     private $_pais;
     private $_cod_ciudad;
     private $_ciudad;
+    private $_numero;
+    private $_nombre;
     
+    
+    function getNumero() {
+        return $this->_numero;
+    }
+
+    function getNombre() {
+        return $this->_nombre;
+    }
+
+    function setNumero($numero) {
+        $this->_numero = $numero;
+        return $this;
+    }
+
+    function setNombre($nombre) {
+        $this->_nombre = $nombre;
+        return $this;
+    }
+
+        
     
     public function getCiudad() {
         return $this->_ciudad;

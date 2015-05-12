@@ -88,15 +88,15 @@ $(function()
 <nav id="page-leftbar" role="navigation" style="position:fixed;">
 
     <!-- BEGIN SIDEBAR MENU -->
-    <ul class="acc-menu" id="sidebar">
+    <ul class="acc-menu " id="sidebar">
         
-        <li <?php if($this->currentMenu==8){ ?>class="active"<?php } ?>>
+        <li <?php if($this->currentMenu==8){ ?>class="active hasChild open"<?php } ?>>
             <a href="javascript:;"><i><img src="<?php echo $_layoutParams['ruta_img']; ?>hotel.png" /></i> <span>Hoteles</span> <span style="float: right;"><img src="<?php echo $_layoutParams['ruta_img']; ?>down.png" width="12px" /></span></a>
-            <ul class="acc-menu">
+            <ul class="acc-menu" style="display:<?php echo $this->mL_expandeFiltrosHot; ?>;">
                 <li>
-                    <form id="frmBuscarHoteles" method="post" action="<?php echo BASE_URL ?>process/bsHot">
+                    <form id="frmBuscarHoteles" method="post" action="<?php echo BASE_URL ?>process/bsHot"> <!-- -->
                         
-                        <select name="mL_cmbCiudadDestino_H" id="mL_cmbCiudadDestino_H" class="form-control" >
+                        <select name="mL_cmbCiudadDestino_H" id="mL_cmbCiudadDestino_H" name="mL_cmbCiudadDestino_H" class="form-control" >
                             <option value="0">Seleccione destino</option>
                             <?php 
                             if($this->objCiudadesHotel)
@@ -129,19 +129,19 @@ $(function()
                             	<td width="30%"><span style="padding-left:10px;">Fecha In:</span></td>
                                 <td>
                                 	<!-- style="background:#d2d3d6;" -->
-                                        <input type="text" class="form-control" id="mL_txtFechaIn_H" name="mL_txtFechaIn_H" value="<?php if(isset($mL_ini)){ echo $mL_ini; } ?>">
+                                        <input type="text" class="form-control" id="mL_txtFechaIn_H" onchange="sumaFechas('mL_txtFechaIn_H','mL_cmbNoches_H','mL_txtFechaOut_H');" name="mL_txtFechaIn_H" value="<?php if(Session::get('sess_pBP_FechaIn')){echo Session::get('sess_pBP_FechaIn');} ?>">
                                 </td>
                             </tr>
                             <tr>
                             	<td width="30%"><span style="padding-left:10px;">Noches:</span></td>
                                 <td>
                                 	<!-- style="background:#d2d3d6;" -->
-                                        <select name="mL_cmbNoches_H" class="form-control">
+                                        <select name="mL_cmbNoches_H" class="form-control" id="mL_cmbNoches_H" onchange="sumaFechas('mL_txtFechaIn_H','mL_cmbNoches_H','mL_txtFechaOut_H');">
                                             <option value="0">Seleccione</option>
 										<?php 
 										for($i=1; $i<=10; $i++)
 										{
-											if(Session::get('sess_pBP_cntHab')==$i)
+											if(Session::get('sess_BP_noches')==$i)
 											{
 										?>
                                         	<option value="<?php echo $i; ?>" selected="selected"><?php echo $i; ?></option>
@@ -153,12 +153,13 @@ $(function()
                                 </td>
                             </tr>
                             <tr>
+                               
                             	<td><span style="padding-left:10px;">Fecha Out:</span></td>
                                 <td>
-                                        <input type="text" class="form-control" id="mL_txtFechaOut_H" name="mL_txtFechaOut_H" value="<?php if(isset($mL_out)){ echo $mL_out; } ?>">
-                                </td>
+                                        <input type="text" class="form-control" id="mL_txtFechaOut_H" name="mL_txtFechaOut_H" value="<?php if(Session::get('sess_pBP_FechaOut')){echo Session::get('sess_pBP_FechaOut');}//if(isset($mL_out)){ echo $mL_out; }?>">
+                                
+                                </td>     
                             </tr>
-                            
                             <tr>
                             	<td width="30%"><span style="padding-left:10px;">Categoria:</span></td>
                                 <td>
@@ -168,7 +169,7 @@ $(function()
 										<?php 
 										for($i=1; $i<=10; $i++)
 										{
-											if(Session::get('sess_pBP_cntHab')==$i)
+											if(Session::get('sess_pBP_Cagegorias')==$i)
 											{
 										?>
                                             <option value="<?php echo $i; ?>" selected="selected"><?php echo $i; ?></option>
@@ -328,11 +329,11 @@ $(function()
         
         
         
-        <li >  <!-- class="open active" -->
+        <li <?php if($this->currentMenu==9){ ?>class="active hasChild open"<?php } ?>>  <!-- class="open active" -->
             <a href="javascript:;"><i><img src="<?php echo $_layoutParams['ruta_img']; ?>servicio.png" /></i> <span>Servicios</span> <span style="float: right;"><img src="<?php echo $_layoutParams['ruta_img']; ?>down.png" width="12px" /></span></a>
-            <ul class="acc-menu"  > <!--style="display: block;" -->
+            <ul class="acc-menu" > <!--style="display: block;" -->
                 <li>
-                    <form id="frmBuscarServicios" method="post" action="process/procesoBuscaProgramas.php">
+                    <form id="frmBuscarServicios" name="frmBuscarServicios" method="post" action="<?php echo BASE_URL ?>process/bsServ"><!--process/bsServ -->
                         
                         <select name="mL_txtCiudadDestino_S" id="mL_txtCiudadDestino_S" class="form-control" >
                             <option value="0">Seleccione destino</option>
@@ -345,7 +346,7 @@ $(function()
                                         $mL_nombreCiu_Serv= $objCiuServ->getCiudad();
                                         $mL_nombreCiudad_Serv = $mL_nombreCiu_Serv." (".$mL_codigoCiu_Serv.")";
 
-                                        if(Session::get('sess_pCS_ciudad')==$mL_nombreCiu_Serv)
+                                        if(Session::get('sess_sCH_ciudad')==$mL_nombreCiu_Serv)
                                         {
                                         ?>
                                             <option value="<?php echo $mL_nombreCiu_Serv; ?>" selected="selected"><?php echo $mL_nombreCiudad_Serv; ?></option>
@@ -367,7 +368,7 @@ $(function()
                             	<td width="30%"><span style="padding-left:10px;">Fecha In:</span></td>
                                 <td>
                                 	<!-- style="background:#d2d3d6;" -->
-                                        <input type="text" class="form-control" id="mL_txtFechaIn_S" name="mL_txtFechaIn_S" value="<?php if(isset($mL_ini)){ echo $mL_ini; } ?>">
+                                        <input type="text" class="form-control" id="mL_txtFechaIn_S" name="mL_txtFechaIn_S" value="<?php if(Session::get('sess_sBP_fechaIn')){ echo Session::get('sess_sBP_fechaIn');} ?>">
                                 </td>
                             </tr>
                             
@@ -375,34 +376,46 @@ $(function()
                             	<td width="30%"><span style="padding-left:10px;">Servicios:</span></td>
                                 <td>
                                 	<!-- style="background:#d2d3d6;" -->
-                                        <select name="mL_cmbServicios_S" class="form-control">
-                                            <option value="0">Seleccione</option>
-										<?php 
-										for($i=1; $i<=10; $i++)
-										{
-											if(Session::get('sess_pBP_cntHab')==$i)
-											{
-										?>
-                                            <option value="<?php echo $i; ?>" selected="selected"><?php echo $i; ?></option>
-                                    <?php }else{ ?>
-                                            <option value="<?php echo $i; ?>"><?php echo $i; ?></option>
-                                    <?php } 
-                                                                            } ?>
-                                    </select>
+                                        
+                                     <select name="mL_cmbServicio_S" id="mL_cmbServicio_S" class="form-control" >
+                                                    <option value="0">Seleccione servicio</option>
+                                                    <?php 
+                                                    if($this->objServicios)// traer datos de la tabla 'tablaser 12/05/2015'
+                                                    { 
+                                                        foreach($this->objServicios as $objSer)
+                                                        {                                                            
+                                                                if(Session::get('sess_sBP_serv')==$objSer->getNombre()){
+                                                                ?>
+                                                                    <option value="<?php echo $objSer->getNumero();?>" selected="selected"> <?php echo $objSer->getNombre();  ?></option>
+                                                                               
+                                                                <?php
+                                                                                                                      
+                                                                }
+                                                                else
+                                                                {
+                                                                ?>
+                                                                    <option value="<?php echo $objSer->getNumero(); ?>"><?php echo $objSer->getNombre(); ?></option>
+                                                                <?php
+                                                                }
+                                                        }
+                                                    }         
+                                                    ?>
+                                                </select>
+                                        
                                 </td>
                             </tr>
                             
                             
                             <tr>
-                            	<td width="30%"><span style="padding-left:10px;">Adutlos:</span></td>
+                            	<td width="30%"><span style="padding-left:10px;">Adultos:</span></td>
                                 <td>
                                 	<!-- style="background:#d2d3d6;" -->
                                         <select name="mL_cmbAdultos_S" class="form-control">
                                             <option value="0">Seleccione</option>
 										<?php 
-										for($i=1; $i<=10; $i++)
+										for($i=1; $i<=4; $i++)
 										{
-											if(Session::get('sess_pBP_cntHab')==$i)
+											if(Session::get('sess_sBP_adultos')==$i)
 											{
 										?>
                                             <option value="<?php echo $i; ?>" selected="selected"><?php echo $i; ?></option>
@@ -422,9 +435,9 @@ $(function()
                                         <select name="mL_cmbChild_S" class="form-control">
                                             <option value="0">Seleccione</option>
 										<?php 
-										for($i=1; $i<=10; $i++)
+										for($i=1; $i<=2; $i++)
 										{
-											if(Session::get('sess_pBP_cntHab')==$i)
+											if(Session::get('sess_sBP_childs')==$i)
 											{
 										?>
                                             <option value="<?php echo $i; ?>" selected="selected"><?php echo $i; ?></option>
@@ -452,11 +465,11 @@ $(function()
         
         
         
-        <li>
+        <li <?php if($this->currentMenu==10){ ?>class="active hasChild open"<?php } ?>>
             <a href="javascript:;"><i><img src="<?php echo $_layoutParams['ruta_img']; ?>programa.png" /></i> <span>Programas</span> <span  style="float: right;"><img src="<?php echo $_layoutParams['ruta_img']; ?>down.png" width="12px" /></span></a>
             <ul class="acc-menu">
                 <li>
-                    <form id="frmBuscarProgramas" method="post" action="process/procesoBuscaProgramas.php">
+                    <form id="frmBuscarProgramas" method="post" action="<?php echo BASE_URL ?>process/bsProgramas"><!-- process/bsProgramas  -->
                      	
                         <select name="mL_txtCiudadDestino_P" id="mL_txtCiudadDestino_P" class="form-control" >
                             <option value="0">Seleccione destino</option>
@@ -469,7 +482,7 @@ $(function()
                                         $mL_nombreCiuPRG= $objCiuPRG->getCiudad();
                                         $mL_nombreCiudadPRG = $mL_nombreCiuPRG." (".$mL_codigoCiuPRG.")";
 
-                                        if(Session::get('sess_pCP_ciudad')==$mL_nombreCiuPRG)
+                                        if(Session::get('sess_prog_Ciudad')==$mL_nombreCiuPRG)
                                         {
                                         ?>
                                             <option value="<?php echo $mL_nombreCiuPRG; ?>" selected="selected"><?php echo $mL_nombreCiudadPRG; ?></option>
@@ -491,7 +504,7 @@ $(function()
                             	<td width="30%"><span style="padding-left:10px;">Fecha In:</span></td>
                                 <td>
                                 	<!-- style="background:#d2d3d6;" -->
-                                        <input type="text" class="form-control" id="mL_txtFechaIn_P" name="mL_txtFechaIn_P" value="<?php if(isset($mL_ini)){ echo $mL_ini; } ?>">
+                                        <input type="text" class="form-control" id="mL_txtFechaIn_P" name="mL_txtFechaIn_P" value="<?php if(Session::get('sess_prog_FechaIn')){ echo Session::get('sess_prog_FechaIn');} ?>">
                                 </td>
                             </tr>
                             
@@ -499,12 +512,12 @@ $(function()
                             <tr>
                             	<td><span style="padding-left:10px;">Habitaci&oacute;n:</span></td>
                                 <td>
-                                	<select name="ML_cmbHab_P" id="ML_cmbHab" class="form-control" onchange="habitaciones('ML_tblHab_P', this.value)">
+                                	<select name="ML_cmbHab_P" id="ML_cmbHab_P" class="form-control" onchange="habitaciones('ML_tblHab_P', this.value)">
                                     	<option value="0">Seleccione</option>
 										<?php 
 										for($i=1; $i<=3; $i++)
 										{
-											if(Session::get('sess_pBP_cntHab')==$i)
+											if(Session::get('sess_prog_Hab')==$i)
 											{
 										?>
                                             <option value="<?php echo $i; ?>" selected="selected"><?php echo $i; ?></option>
@@ -523,19 +536,19 @@ $(function()
                                     <?php for($i=1; $i<=3; $i++)
                                     {
                                         $display='display:none;';
-                                        if(Session::get('sess_BP_cntHab')>=$i){ $display= 'display:block;'; }?>
+                                        if(Session::get('sess_BP_cntHab_P')>=$i){ $display= 'display:block;'; }?>
                                     <div id="ML_tblHab_P_<?php echo $i; ?>" style="<?php echo $display; ?>">
                                         <table width="100%" border="0" cellspacing="0" cellpadding="5">
                                             <tr>
                                                 <td>Adultos</td>
                                                 <td>
-                                                    <select name="mL_cmbAdultos_<?php echo $i; ?>" id="mL_cmbAdultos_<?php echo $i; ?>">
+                                                    <select name="mL_cmbAdultos_P_<?php echo $i; ?>" id="mL_cmbAdultos_P_<?php echo $i; ?>">
                                                       <?php
-                                                          for($x=1; $x<=6; $x++)
+                                                          for($x=1; $x<=4; $x++)
                                                           { 
-                                                              if(Session::get('sess_BP_Adl_' . $i) == $x)
+                                                              if(Session::get('sess_BP_Adl_P_' . $i) == $x)
                                                               { ?>
-                                                              <option selected="selected" value="<?php echo Session::get('sess_BP_Adl_' . $i); ?>"><?php echo Session::get('sess_BP_Adl_' . $i); ?></option>
+                                                              <option selected="selected" value="<?php echo Session::get('sess_BP_Adl_P_' . $i); ?>"><?php echo Session::get('sess_BP_Adl_P_' . $i); ?></option>
                                                               <?php 
                                                             }
                                                             else
@@ -547,13 +560,13 @@ $(function()
                                                 </td>
                                                 <td>Edad C1</td>
                                                 <td>
-                                                    <select id="mL_edadChild_1_<?php echo $i; ?>" name="mL_edadChild_1_<?php echo $i; ?>" <?php if(Session::get('sess_BP_Chd_' . $i)>=1){}else{ echo "disabled='disabled'"; }?> >
+                                                    <select id="mL_edadChild_1_P_<?php echo $i; ?>" name="mL_edadChild_1_P_<?php echo $i; ?>" <?php if(Session::get('sess_BP_Chd_P_' . $i)>=1){}else{ echo "disabled='disabled'"; }?> >
                                                     <?php
                                                     for($x=2;$x<=12;$x++)
                                                     {
-                                                        if(Session::get('sess_BP_edadChd_1_' . $i) == $x)
+                                                        if(Session::get('sess_BP_edadChd_1_P_' . $i) == $x)
                                                         {?>
-                                                    <option selected="selected" value="<?php echo Session::get('sess_BP_edadChd_1_' . $i); ?>"><?php echo Session::get('sess_BP_edadChd_1_' . $i); ?></option>
+                                                    <option selected="selected" value="<?php echo Session::get('sess_BP_edadChd_1_P_' . $i); ?>"><?php echo Session::get('sess_BP_edadChd_1_P_' . $i); ?></option>
                                                     <?php
                                                         }
                                                         else
@@ -569,11 +582,11 @@ $(function()
                                             <tr>
                                                 <td>Child</td>
                                                 <td>
-                                                    <select name="mL_child_<?php echo $i; ?>" id="mL_child_<?php echo $i; ?>" onchange="habilitaEdadChild(this.value, <?php echo $i; ?>);">
+                                                    <select name="mL_child_P_<?php echo $i; ?>" id="mL_child_<?php echo $i; ?>" onchange="habilitaEdadChild(this.value, <?php echo $i; ?>);">
                                                     <?php 
                                                         for($x=0; $x<=2; $x++)
                                                         {
-                                                            if(Session::get('sess_BP_Chd_' . $i) == $x)
+                                                            if(Session::get('sess_BP_Chd_P_' . $i) == $x)
                                                             {?>
                                                         <option selected="selected" value="<?php echo $x; ?>"><?php echo $x; ?></option>
                                                         <?php }else{ ?>                          
@@ -585,13 +598,13 @@ $(function()
 
                                                 <td>Edad C2</td>
                                                 <td>
-                                                    <select id="mL_edadChild_2_<?php echo $i; ?>" name="mL_edadChild_2_<?php echo $i; ?>" <?php if(Session::get('sess_BP_Chd_' . $i)==2){}else{ echo "disabled='disabled'"; }?> >
+                                                    <select id="mL_edadChild_2_<?php echo $i; ?>" name="mL_edadChild_2_P_<?php echo $i; ?>" <?php if(Session::get('sess_BP_Chd_P_' . $i)==2){}else{ echo "disabled='disabled'"; }?> >
                                                         <?php
                                                         for($x=2; $x<=12; $x++)
                                                         {
-                                                            if(Session::get('sess_BP_edadChd_2_' . $i) == $x)
+                                                            if(Session::get('sess_BP_edadChd_2_P_' . $i) == $x)
                                                             { ?>
-                                                        <option selected="selected" value="<?php echo Session::get('sess_BP_edadChd_2_' . $i); ?>"><?php echo Session::get('sess_BP_edadChd_2_' . $i); ?></option>
+                                                        <option selected="selected" value="<?php echo Session::get('sess_BP_edadChd_2_P_' . $i); ?>"><?php echo Session::get('sess_BP_edadChd_2_P_' . $i); ?></option>
                                                         <?php }else{ ?>                          
                                                         <option value="<?php echo $x; ?>"><?php echo $x; ?></option>
                                                         <?php }
@@ -604,11 +617,11 @@ $(function()
                                             <tr>
                                                 <td>Infant</td>
                                                 <td colspan="3">
-                                                    <select name="mL_inf_<?php echo $i; ?>" id="mL_inf_<?php echo $i; ?>">
+                                                    <select name="mL_inf_P_<?php echo $i; ?>" id="mL_inf_<?php echo $i; ?>">
                                                       <?php
                                                         for($x=0; $x<=1; $x++)
                                                         {
-                                                            if(Session::get('sess_BP_Inf_' . $i) == $x)
+                                                            if(Session::get('sess_BP_Inf_P_' . $i) == $x)
                                                             {?>
                                                         <option selected="selected" value="<?php echo $x; ?>"><?php echo $x; ?></option>
                                                         <?php }else{ ?>                          
@@ -694,13 +707,13 @@ $('#btnBuscarHoteles').on('click',function()
 {
     var mL_Error=0;
     $("#btnBuscarHoteles").attr('disabled', 'disabled');
-    document.getElementById('frmBuscarHoteles').submit();
-    return false;
+    //document.getElementById('frmBuscarHoteles').submit();
+    //return false;
     
     if($('#mL_cmbCiudadDestino_H').val() != 0)
     {
         if($('#ML_cmbHab').val() != 0)
-        {
+      {
             $(document).skylo('start');
 
             setTimeout(function(){
@@ -750,13 +763,145 @@ $('#btnBuscarHoteles').on('click',function()
 
 });
 /*END: Busqueda de Hoteles*/
+
+
+
+//Busqueda de servicios
+$('#btnBuscarServicios').on('click',function()
+{
+    var mL_Error=0;
+    $("#btnBuscarServicios").attr('disabled', 'disabled');
+    //document.getElementById('frmBuscarHoteles').submit();
+    //return false;
     
+    if($('#mL_txtCiudadDestino_S').val() != 0)
+    {
+       
+            $(document).skylo('start');
+
+            setTimeout(function(){
+                $(document).skylo('set',50);
+            },1000);
+
+            setTimeout(function(){
+                $(document).skylo('end');
+            },1500);
+            setTimeout(function(){
+               document.getElementById('frmBuscarServicios').submit();
+            },2500);   
+       
+    }
+    else
+    {
+            mL_Error=1;
+            $('#mensajeWar').html('Debe ingresar una ciudad de destino');	
+    }
+
+
+
+
+    if( mL_Error==1 )
+    {
+        $('#divAlertWar').delay( 10 ).fadeIn( 500 );
+        $('#divAlertWar').animate({
+                'display': 'block'
+        });
+
+        $('#divAlertWar').delay( 2000 ).fadeOut( 500 );
+        $('#divAlertWar').animate({
+                                    'display': 'none'
+                                });
+
+        $("#btnBuscarServicios").delay(2000).queue(function(dis)
+        {
+            $("#btnBuscarServicios").removeAttr("disabled");
+            dis();
+        });	
+    }
+
+});
+//fin buscarServicios
+
+// Buscar Programas
+$('#btnBuscarProgramas').on('click',function()
+{
+    var mL_Error=0;
+    $("#btnBuscarProgramas").attr('disabled', 'disabled');
+    //document.getElementById('frmBuscarHoteles').submit();
+    //return false;
     
+    if($('#mL_txtCiudadDestino_P').val() != 0)
+    {
+       
+            $(document).skylo('start');
+
+            setTimeout(function(){
+                $(document).skylo('set',50);
+            },1000);
+
+            setTimeout(function(){
+                $(document).skylo('end');
+            },1500);
+            setTimeout(function(){
+               document.getElementById('frmBuscarProgramas').submit();
+            },2500);   
+       
+    }
+    else
+    {
+            mL_Error=1;
+            $('#mensajeWar').html('Debe ingresar una ciudad de destino');	
+    }
+
+
+
+
+    if( mL_Error==1 )
+    {
+        $('#divAlertWar').delay( 10 ).fadeIn( 500 );
+        $('#divAlertWar').animate({
+                'display': 'block'
+        });
+
+        $('#divAlertWar').delay( 2000 ).fadeOut( 500 );
+        $('#divAlertWar').animate({
+                                    'display': 'none'
+                                });
+
+        $("#btnBuscarProgramas").delay(2000).queue(function(dis)
+        {
+            $("#btnBuscarProgramas").removeAttr("disabled");
+            dis();
+        });	
+    }
+
+});
+
+function sumaFechas(fechaIni, dias, fechaOut)
+{
+        var fechaIn = $('#'+fechaIni).val().split('/');     
+        var cantidad = parseInt($('#'+dias).val());
+        var milisegundos= parseInt(cantidad*24*60*60*1000);                
+        var fecha=new Date(fechaIn[1]+'/'+fechaIn[0]+'/'+fechaIn[2]); //fechaIn[1]+'/'+fechaIn[0]+'/'+fechaIn[2]  
+        var tiempo=fecha.getTime();  
+        
+        fecha.setTime(tiempo+parseInt(milisegundos)); 
+        
+        var mes = fecha.getMonth()+1;          
+        var dia = fecha.getDate(); 
+        var anio = fecha.getFullYear();
+
+        if(dia < 10 ){dia ='0'+dia;}
+        if(mes < 10){mes = '0'+mes;}
+        
+        $('#'+fechaOut).attr("value",dia+'/'+mes+'/'+anio);
+}
     
-    
-    
-    
-    
+
+
+
+
+
     $('#menuConsBook').on('click',function(){
         $(document).skylo('start');
 
@@ -766,7 +911,7 @@ $('#btnBuscarHoteles').on('click',function()
 
         setTimeout(function(){
             $(document).skylo('end');
-        },1500);
+        },1000);
 		setTimeout(function(){
             window.location.href = '<?php echo BASE_URL; ?>sistema/consultarBooking';
         },2500);

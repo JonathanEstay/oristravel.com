@@ -166,7 +166,7 @@
                                                 <table class="table table-bordered table-striped" style="font-size: 11px; width: 600px;" align="center">
                                                     <tr>
                                                         <td>Escriba una nota</td>
-                                                        <td><textarea style='height: 150px;' id="Carr_textAreaNota" name="Carr_textAreaNota" class="form-control" value="Escriba una nota..."></textarea></td>
+                                                        <td><textarea style="height: 150px" id="Carr_textAreaNota" name="Carr_textAreaNota" class="form-control" value="Escriba una nota..."></textarea></td>
                                                         
                                                     </tr>
                                                 </table>
@@ -228,7 +228,9 @@ $('#btnAtr_P2').on('click',function(){
         $('#basicwizard-step-0').css('display', 'block');
         
 });
-$('#btnSig_P2').on('click',function(){  
+$('#btnSig_P2').on('click',function(){
+    
+         
          var formData = new FormData($(".frm_paso2")[0]);
         $.ajax({
              type:"POST", 
@@ -242,9 +244,16 @@ $('#btnSig_P2').on('click',function(){
              success:function(data)
              {
                  if(data =="Error"){
+                  $('#btnSig_P2').attr("disabled","disabled");
+                  $("#btnSig_P2").delay(2000).queue(function(dis)
+                 {
+                        $("#btnSig_P2").removeAttr("disabled");
+                           dis();
+                 });   
                   noExito("Ingrese todos los datos"); 
                  }
                  else{
+                     
                         $("#div_paso3").html(data);
                  
                         $('#basicwizard-head-1').removeClass('stepy-active');
